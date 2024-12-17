@@ -1,0 +1,7 @@
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    username: root
+    password: test
+    url: jdbc:sqlite:/Users/hbj/Study/apm-sniffer/apm-app-test/sqlite3/agent-test-db.sqlite
