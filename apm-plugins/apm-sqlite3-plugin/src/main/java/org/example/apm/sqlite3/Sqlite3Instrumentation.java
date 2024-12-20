@@ -5,13 +5,14 @@ import net.bytebuddy.matcher.ElementMatcher;
 import org.example.core.match.ClassMatch;
 import org.example.core.match.MultiClassNameMatch;
 import org.example.core.plugin.*;
+import org.example.core.plugin.enhance.ClassEnhancePluginDefine;
 import org.example.core.plugin.interceptor.ConstructorInterceptorPoint;
 import org.example.core.plugin.interceptor.InstanceMethodInterceptorPoint;
 import org.example.core.plugin.interceptor.StaticMethodInterceptorPoint;
 
 import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 
-public class Sqlite3Instrumentation extends AbstractClassEnhancePluginDefine {
+public class Sqlite3Instrumentation extends ClassEnhancePluginDefine {
 
 
     private static final String JDBC3_PREPARED_STATEMENT = "org.sqlite.jdbc3.JDBC3PreparedStatement";

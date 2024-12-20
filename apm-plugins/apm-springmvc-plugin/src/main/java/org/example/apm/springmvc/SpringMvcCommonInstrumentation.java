@@ -3,13 +3,14 @@ package org.example.apm.springmvc;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.example.core.plugin.AbstractClassEnhancePluginDefine;
+import org.example.core.plugin.enhance.ClassEnhancePluginDefine;
 import org.example.core.plugin.interceptor.ConstructorInterceptorPoint;
 import org.example.core.plugin.interceptor.InstanceMethodInterceptorPoint;
 import org.example.core.plugin.interceptor.StaticMethodInterceptorPoint;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
-public abstract class SpringMvcCommonInstrumentation extends AbstractClassEnhancePluginDefine {
+public abstract class SpringMvcCommonInstrumentation extends ClassEnhancePluginDefine {
 
     private static final String MAPPING_PKG_PREFIX = "org.springframework.web.bind.annotation";
     private static final String MAPPING = "Mapping";
@@ -20,7 +21,7 @@ public abstract class SpringMvcCommonInstrumentation extends AbstractClassEnhanc
         return new InstanceMethodInterceptorPoint[]{
                 new InstanceMethodInterceptorPoint() {
                     @Override
-                    public ElementMatcher<? super MethodDescription> getMethodMatcher() {
+                    public ElementMatcher.Junction<? super MethodDescription> buildMethodJunction() {
                         return not(isStatic()).and(isAnnotatedWith(nameStartsWith(MAPPING_PKG_PREFIX).and(nameEndsWith(MAPPING))));
                     }
 
