@@ -36,7 +36,7 @@
                         <manifestEntries>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
-                            <Premain-Class>org.example.AgentStarter</Premain-Class>
+                            <Premain-Class>org.example.SkyWalkingAgent</Premain-Class>
                         </manifestEntries>
                     </archive>
                     <descriptorRefs>
