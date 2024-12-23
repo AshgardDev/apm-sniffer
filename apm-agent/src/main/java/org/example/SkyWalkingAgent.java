@@ -10,7 +10,7 @@ import java.lang.instrument.Instrumentation;
 
 @Slf4j
 public class SkyWalkingAgent {
-    public static void premain(String args, Instrumentation instrumentation) throws PluginException {
+    public static void premain(String args, Instrumentation instrumentation) {
         PluginFinder pluginFinder = null;
         try {
             pluginFinder = new PluginFinder(null);

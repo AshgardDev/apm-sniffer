@@ -5,6 +5,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.utility.JavaModule;
 import org.example.core.match.ClassMatch;
+import org.example.core.plugin.enhance.EnhanceContext;
 import org.example.core.plugin.interceptor.ConstructorInterceptorPoint;
 import org.example.core.plugin.interceptor.InstanceMethodInterceptorPoint;
 import org.example.core.plugin.interceptor.StaticMethodInterceptorPoint;
@@ -16,6 +17,8 @@ import java.security.ProtectionDomain;
  */
 @Slf4j
 public abstract class AbstractClassEnhancePluginDefine {
+
+    public static final String CONTEXT_ATTR_NAME = "_$EnhancedClassField_ws";
 
     public abstract ClassMatch enhanceClass();
 
@@ -33,9 +36,19 @@ public abstract class AbstractClassEnhancePluginDefine {
      * @param classLoader
      * @param module
      * @param protectionDomain
+     * @param context
      * @return
      */
-    public DynamicType.Builder<?> define(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+    public DynamicType.Builder<?> define(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context) {
+        String pluginDefineClassName = this.getClass().getName();
+        log.info("开始使用{}增强{}", pluginDefineClassName, typeDescription.getActualName());
+        DynamicType.Builder<?> newBuilder = this.enhance(builder, typeDescription, classLoader, module, protectionDomain, context);
+        context.initializationStageCompleted();
+        log.info("使用{}增强{}结束", pluginDefineClassName, typeDescription.getActualName());
+        return newBuilder;
+    }
+
+    public DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context) {
         DynamicType.Builder<?> newBuilder = builder;
         // 静态方法增强
         DynamicType.Builder<?> staticBuilder = this.enhanceStaticMethod(newBuilder, typeDescription, classLoader, module, protectionDomain);
@@ -43,14 +56,15 @@ public abstract class AbstractClassEnhancePluginDefine {
             newBuilder = staticBuilder;
         }
         // 实例方法包括构造方法和普通方法
-        DynamicType.Builder<?> instanceBuilder = this.enhanceInstanceMethod(newBuilder, typeDescription, classLoader, module, protectionDomain);
+        DynamicType.Builder<?> instanceBuilder = this.enhanceInstanceMethod(newBuilder, typeDescription, classLoader, module, protectionDomain, context);
         if (instanceBuilder != null) {
             newBuilder = instanceBuilder;
         }
         return newBuilder;
     }
 
-    protected abstract DynamicType.Builder<?> enhanceInstanceMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain);
 
     protected abstract DynamicType.Builder<?> enhanceStaticMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain);
+
+    protected abstract DynamicType.Builder<?> enhanceInstanceMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context);
 }

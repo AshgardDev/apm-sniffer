@@ -16,7 +16,7 @@ public class ConstructorInter {
     @RuntimeType
     public void intercept(@This Object instance, @AllArguments Object[] allArguments) throws Throwable {
         try {
-            interceptor.onConstructorInterceptor(instance, allArguments);
+            interceptor.onConstructorInterceptor((EnhancedInstance)instance, allArguments);
         } catch (Exception e) {
             log.error("构造后置拦截异常", e);
         }

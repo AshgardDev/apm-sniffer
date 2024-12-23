@@ -2,16 +2,17 @@ package org.example.apm.sqlite3;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bind.annotation.*;
+import org.example.core.plugin.enhance.EnhancedInstance;
+import org.example.core.plugin.enhance.InstanceMethodAroundInterceptor;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 @Slf4j
-public class Sqlite3Interceptor {
+public class Sqlite3Interceptor implements InstanceMethodAroundInterceptor {
 
-    @RuntimeType
-    public Object intercept(@This Object targetObject, @Origin Method targetMethod,
+    /*public Object intercept(@This Object targetObject, @Origin Method targetMethod,
                             @AllArguments Object[] targetMethodArgs,
                             @SuperCall Callable<?> zuper) {
         log.info("Sqlite3方法Before拦截， 拦截方法：{}， 参数：{}", targetMethod.getName(), Arrays.toString(targetMethodArgs));
@@ -28,5 +29,20 @@ public class Sqlite3Interceptor {
             log.info("Sqlite3方法执行耗时统计：{}ms", (end - start));
         }
         return call;
+    }*/
+
+    @Override
+    public void beforeMethod(EnhancedInstance instance, Method method, Object[] allArguments) {
+        log.info("Sqlite3方法Before拦截， 拦截方法：{}， 参数：{}", method.getName(), Arrays.toString(allArguments));
+    }
+
+    @Override
+    public void handleException(EnhancedInstance instance, Method method, Object[] allArguments, Exception e) {
+
+    }
+
+    @Override
+    public Object afterMethod(Object result, EnhancedInstance instance, Method method, Object[] allArguments) {
+        return result;
     }
 }

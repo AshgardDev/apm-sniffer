@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.SuperMethodCall;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -13,6 +14,7 @@ import org.example.core.plugin.interceptor.ConstructorInterceptorPoint;
 import org.example.core.plugin.interceptor.InstanceMethodInterceptorPoint;
 import org.example.core.plugin.interceptor.StaticMethodInterceptorPoint;
 
+import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 
 import static net.bytebuddy.matcher.ElementMatchers.isStatic;
@@ -40,7 +42,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractClassEnhancePlugi
     }
 
     @Override
-    protected DynamicType.Builder<?> enhanceInstanceMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
+    protected DynamicType.Builder<?> enhanceInstanceMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context) {
         ConstructorInterceptorPoint[] constructorInterceptorPoints = getConstructorInterceptorPoints();
         InstanceMethodInterceptorPoint[] instanceMethodInterceptorPoints = getInstanceMethodInterceptorPoints();
 
@@ -49,6 +51,18 @@ public abstract class ClassEnhancePluginDefine extends AbstractClassEnhancePlugi
 
         if (!existsConstructorInterceptorPoint && !existInstanceMethodInterceptorPoint) {
             return builder;
+        }
+
+        if (!typeDescription.isAssignableTo(EnhancedInstance.class)) {
+            if(!context.isObjectExtended()) {
+                /**
+                 * 新增属性,对于同一个类只需要执行一次
+                 */
+                builder = builder.defineField(CONTEXT_ATTR_NAME, Object.class, Modifier.PRIVATE | Modifier.VOLATILE)
+                        .implement(EnhancedInstance.class)
+                        .intercept(FieldAccessor.ofField(CONTEXT_ATTR_NAME));
+                context.objectExtendedCompleted();
+            }
         }
 
         if (existsConstructorInterceptorPoint) {

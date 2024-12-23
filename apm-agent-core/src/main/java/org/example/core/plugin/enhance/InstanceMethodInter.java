@@ -20,8 +20,9 @@ public class InstanceMethodInter {
     ) throws Throwable {
         String clazzType = instance.getClass().getName();
         log.info("类{}.方法{}拦截开始", instance.getClass().getName(), method.getName());
+        EnhancedInstance enhancedInstance = (EnhancedInstance) instance;
         try {
-            interceptor.beforeMethod(instance, method, allArguments);
+            interceptor.beforeMethod(enhancedInstance, method, allArguments);
         } catch (Exception e) {
             log.error("类{}.方法{}前置拦截执行错误", clazzType, method.getName(), e);
         }
@@ -30,13 +31,13 @@ public class InstanceMethodInter {
             result = zuper.call();
         } catch (Exception e) {
             try {
-                interceptor.handleException(instance, method, allArguments, e);
+                interceptor.handleException(enhancedInstance, method, allArguments, e);
             } catch (Exception ex) {
                 log.error("类{}.方法{}异常拦截执行错误", clazzType, method.getName(), ex);
             }
         } finally {
             try {
-                result = interceptor.afterMethod(result, instance, method, allArguments);
+                result = interceptor.afterMethod(result, enhancedInstance, method, allArguments);
             } catch (Exception e) {
                 log.error("类{}.方法{}后置拦截执行错误", clazzType, method.getName(), e);
             }

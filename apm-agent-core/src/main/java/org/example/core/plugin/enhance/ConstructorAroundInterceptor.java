@@ -7,5 +7,5 @@ public interface ConstructorAroundInterceptor {
      * @param instance
      * @param allArguments
      */
-    void onConstructorInterceptor(Object instance, Object[] allArguments);
+    void onConstructorInterceptor(EnhancedInstance instance, Object[] allArguments);
 }

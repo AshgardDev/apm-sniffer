@@ -2,31 +2,33 @@ package org.example.apm.springmvc;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bind.annotation.*;
+import org.example.core.plugin.enhance.EnhancedInstance;
+import org.example.core.plugin.enhance.InstanceMethodAroundInterceptor;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 @Slf4j
-public class SpringMvcInterceptor {
+public class SpringMvcInterceptor implements InstanceMethodAroundInterceptor {
 
-    @RuntimeType
-    public Object intercept(@This Object targetObject, @Origin Method targetMethod,
-                            @AllArguments Object[] targetMethodArgs,
-                            @SuperCall Callable<?> zuper) {
-        log.info("SpringMvc方法Before拦截， 拦截方法：{}， 参数：{}", targetMethod.getName(), Arrays.toString(targetMethodArgs));
-        long start = System.currentTimeMillis();
-        Object call = null;
-        try {
-            call = zuper.call();
-            log.info("SpringMvc方法After拦截， 拦截方法：{}， 参数：{}， 结果：{}", targetMethod.getName(),
-                    Arrays.toString(targetMethodArgs), call);
-        } catch (Exception e) {
-            log.info("SpringMvc方法Exception拦截， 拦截方法：{}， 异常：{}", targetMethod.getName(), e.getMessage(), e);
-        } finally {
-            long end = System.currentTimeMillis();
-            log.info("SpringMvc方法执行耗时统计：{}ms", (end - start));
+    @Override
+    public void beforeMethod(EnhancedInstance instance, Method method, Object[] allArguments) {
+        log.info("SpringMvc方法Before拦截， 拦截方法：{}， 参数：{}", method.getName(), Arrays.toString(allArguments));
+        instance.setSkyWalkingDynamicField("this is context");
+    }
+
+    @Override
+    public void handleException(EnhancedInstance instance, Method method, Object[] allArguments, Exception e) {
+        log.info("SpringMvc方法Exception拦截， 拦截方法：{}， 异常：{}", method.getName(), e.getMessage(), e);
+    }
+
+    @Override
+    public Object afterMethod(Object result, EnhancedInstance instance, Method method, Object[] allArguments) {
+        Object skyWalkingDynamicField = instance.getSkyWalkingDynamicField();
+        if (skyWalkingDynamicField != null) {
+            System.out.println("skyWalkingDynamicField = " + skyWalkingDynamicField);
         }
-        return call;
+        return result;
     }
 }
