@@ -2,10 +2,9 @@ package org.example.core.plugin;
 
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import net.bytebuddy.matcher.ElementMatchers;
-import org.example.core.match.ClassMatch;
-import org.example.core.match.IndirectMatch;
-import org.example.core.match.NameMatch;
+import org.example.core.plugin.match.ClassMatch;
+import org.example.core.plugin.match.IndirectMatch;
+import org.example.core.plugin.match.NameMatch;
 
 import java.util.LinkedList;
 import java.util.List;

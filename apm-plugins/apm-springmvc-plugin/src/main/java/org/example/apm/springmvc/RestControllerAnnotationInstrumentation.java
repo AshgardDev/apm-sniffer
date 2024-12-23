@@ -1,7 +1,7 @@
 package org.example.apm.springmvc;
 
-import org.example.core.match.ClassAnnotationNameMatch;
-import org.example.core.match.ClassMatch;
+import org.example.core.plugin.match.ClassAnnotationNameMatch;
+import org.example.core.plugin.match.ClassMatch;
 
 public class RestControllerAnnotationInstrumentation extends SpringMvcCommonInstrumentation{
 

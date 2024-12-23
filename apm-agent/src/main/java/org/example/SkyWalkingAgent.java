@@ -13,7 +13,7 @@ public class SkyWalkingAgent {
     public static void premain(String args, Instrumentation instrumentation) {
         PluginFinder pluginFinder = null;
         try {
-            pluginFinder = new PluginFinder(null);
+            pluginFinder = new PluginFinder(new PluginBootstrap().loadPlugins());
         } catch (Exception e) {
             log.error("Init plugin finder error", e);
             return;

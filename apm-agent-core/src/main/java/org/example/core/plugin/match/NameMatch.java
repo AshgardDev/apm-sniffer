@@ -1,4 +1,4 @@
-package org.example.core.match;
+package org.example.core.plugin.match;
 
 import lombok.Getter;
 import net.bytebuddy.description.type.TypeDescription;

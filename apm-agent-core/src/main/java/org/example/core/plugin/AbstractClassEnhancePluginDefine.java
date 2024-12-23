@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.utility.JavaModule;
-import org.example.core.match.ClassMatch;
+import org.example.core.plugin.match.ClassMatch;
 import org.example.core.plugin.enhance.EnhanceContext;
 import org.example.core.plugin.interceptor.ConstructorInterceptorPoint;
 import org.example.core.plugin.interceptor.InstanceMethodInterceptorPoint;

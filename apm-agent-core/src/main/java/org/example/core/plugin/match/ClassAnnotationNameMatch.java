@@ -1,4 +1,4 @@
-package org.example.core.match;
+package org.example.core.plugin.match;
 
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.annotation.AnnotationList;
