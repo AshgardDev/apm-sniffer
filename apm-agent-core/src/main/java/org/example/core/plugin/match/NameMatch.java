@@ -6,6 +6,9 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
+/**
+ * 名称匹配器
+ */
 @Getter
 public class NameMatch implements ClassMatch {
 

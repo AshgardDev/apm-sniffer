@@ -4,23 +4,18 @@ import org.example.core.loader.AgentClassLoader;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
 public class PluginResourcesResolver {
 
-    public List<URL> getResources(){
-        List<URL> cfgUrlPaths = new ArrayList<>();
+    public static List<URL> getResources(){
         try {
-            Enumeration<URL> resources = AgentClassLoader.getDefault().getResources("skywalking-plugin.def");
-            while (resources.hasMoreElements()) {
-                URL resource = resources.nextElement();
-                cfgUrlPaths.add(resource);
-            }
+            Enumeration<URL> resources = AgentClassLoader.getDefault().getResources(PluginBootstrap.PLUGIN_DEFINE_FILE);
+            return Collections.list(resources);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("解析Plugin的def资源失败", e);
         }
-        return cfgUrlPaths;
     }
 }

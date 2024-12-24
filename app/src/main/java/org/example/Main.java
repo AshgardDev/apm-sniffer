@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("org.example.mapper")
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Main.class.getClassLoader());
-        System.out.println(SpringApplication.class.getClassLoader());
+        System.out.println("应用启动");
         SpringApplication.run(Main.class);
     }
 }

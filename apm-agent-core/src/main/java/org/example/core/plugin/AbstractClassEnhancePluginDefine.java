@@ -18,36 +18,51 @@ import java.security.ProtectionDomain;
 @Slf4j
 public abstract class AbstractClassEnhancePluginDefine {
 
+    /**
+     * 新增属性名
+     */
     public static final String CONTEXT_ATTR_NAME = "_$EnhancedClassField_ws";
 
+    /**
+     * 增强类
+     * @return
+     */
     public abstract ClassMatch enhanceClass();
 
+    /**
+     * 实例方法拦截点列表，一个类可以有多个实例方法被拦截
+     * @return
+     */
     public abstract InstanceMethodInterceptorPoint[] getInstanceMethodInterceptorPoints();
 
+    /**
+     * 构造方法拦截点列表，一个类可以有多个构造方法被拦截
+     * @return
+     */
     public abstract ConstructorInterceptorPoint[] getConstructorInterceptorPoints();
 
+    /**
+     * 静态方法拦截点列表，一个类可以有多个静态方法被拦截
+     * @return
+     */
     public abstract StaticMethodInterceptorPoint[] getStaticMethodInterceptorPoints();
 
     /**
      * 定义增强类的主入口
-     *
-     * @param builder
-     * @param typeDescription
-     * @param classLoader
-     * @param module
-     * @param protectionDomain
-     * @param context
-     * @return
      */
     public DynamicType.Builder<?> define(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context) {
         String pluginDefineClassName = this.getClass().getName();
-        log.info("开始使用{}增强{}", pluginDefineClassName, typeDescription.getActualName());
+        String type = typeDescription.getActualName();
+        log.info("开始使用插件{}来增强类{}", pluginDefineClassName, type);
         DynamicType.Builder<?> newBuilder = this.enhance(builder, typeDescription, classLoader, module, protectionDomain, context);
         context.initializationStageCompleted();
-        log.info("使用{}增强{}结束", pluginDefineClassName, typeDescription.getActualName());
+        log.info("结束使用插件{}来增强类{}", pluginDefineClassName, type);
         return newBuilder;
     }
 
+    /**
+     * 增强逻辑定义
+     */
     public DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain, EnhanceContext context) {
         DynamicType.Builder<?> newBuilder = builder;
         // 静态方法增强
@@ -62,7 +77,6 @@ public abstract class AbstractClassEnhancePluginDefine {
         }
         return newBuilder;
     }
-
 
     protected abstract DynamicType.Builder<?> enhanceStaticMethod(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain);
 

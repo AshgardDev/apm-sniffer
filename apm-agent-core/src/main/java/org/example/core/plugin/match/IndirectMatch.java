@@ -3,6 +3,9 @@ package org.example.core.plugin.match;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
+/**
+ * 间接类匹配器
+ */
 public interface IndirectMatch extends ClassMatch {
 
     ElementMatcher.Junction<? super TypeDescription> buildJunction();

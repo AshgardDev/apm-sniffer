@@ -7,24 +7,26 @@ import org.example.core.loader.InterceptorInstanceLoader;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
+/**
+ * 实例方法拦截器
+ */
 @Slf4j
 public class InstanceMethodInter {
 
-    private InstanceMethodAroundInterceptor interceptor;
+    private final InstanceMethodAroundInterceptor interceptor;
 
     public InstanceMethodInter(String methodInterceptor, ClassLoader classLoader) {
         try {
             interceptor = InterceptorInstanceLoader.load(methodInterceptor, classLoader);
         } catch (Exception e) {
-            log.error("构造拦截器失败", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("实例方法拦截器" + methodInterceptor + "加载失败", e);
         }
     }
 
     @RuntimeType
     public Object intercept(@This Object instance, @AllArguments Object[] allArguments
             , @SuperCall Callable<?> zuper, @Origin Method method
-    ) throws Throwable {
+    ) {
         String clazzType = instance.getClass().getName();
         log.info("类{}.方法{}拦截开始", instance.getClass().getName(), method.getName());
         EnhancedInstance enhancedInstance = (EnhancedInstance) instance;

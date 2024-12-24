@@ -1,5 +1,11 @@
 package org.example.core.plugin;
 
+import lombok.Getter;
+
+/**
+ * Def插件定义
+ */
+@Getter
 public class PluginDefine {
 
     private String name;
@@ -16,11 +22,4 @@ public class PluginDefine {
         return new PluginDefine(pluginDefine[0], pluginDefine[1]);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDefineClass() {
-        return defineClass;
-    }
 }

@@ -1,5 +1,7 @@
 # apm-sniffer
 
+学习资源： https://www.bilibili.com/video/BV1Jv4y1a7Kw?spm_id_from=333.788.videopod.episodes&vd_source=bd99477a13c4939885a67f476eed959a
+
 ### 学习
 从java-agent-study项目中，已经实现了agent的基本使用，其主要逻辑是：
 在入口进行拦截，先匹配类@1，再匹配方法@2，然后进行拦截，最后交给拦截处理@3。
@@ -102,6 +104,12 @@ public abstract StaticMethodInterceptorPoint[] getStaticMethodInterceptorPoints(
 ```
 第一个方法是指定匹配器，匹配逻辑
 第二个方法是为了在进行方法匹配，过滤插件时，根据isMatch(TypeDescription typeDescription)来绑定类和方法的关系--即解决问题3,所以这里传入了类信息。
+
+### 类加载器
+agent-core.jar -- 是应用类加载器加载的
+plugins/xxxInstrumentation.jar -- 是AgentClassLoader默认类加载器加载的
+interceptor -- 是AgentClassLoader(targetClassLoader) 加载的
+
 
 
 

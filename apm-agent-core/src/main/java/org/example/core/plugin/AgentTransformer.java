@@ -19,6 +19,11 @@ public class AgentTransformer implements AgentBuilder.Transformer {
         this.pluginFinder = pluginFinder;
     }
 
+    /**
+     * 增强逻辑
+     *
+     * ps：这个方法只有在第一次类加载时，若type匹配成功，才会执行
+     */
     @Override
     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module, ProtectionDomain protectionDomain) {
         List<AbstractClassEnhancePluginDefine> plugins = pluginFinder.find(typeDescription);

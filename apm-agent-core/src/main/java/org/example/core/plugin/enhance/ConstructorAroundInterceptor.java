@@ -1,5 +1,8 @@
 package org.example.core.plugin.enhance;
 
+/**
+ * 构造方法拦截器
+ */
 public interface ConstructorAroundInterceptor {
 
     /**

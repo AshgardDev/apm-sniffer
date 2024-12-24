@@ -8,13 +8,16 @@ import java.util.List;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
+/**
+ * 多个类名匹配器 or
+ */
 public class MultiClassNameMatch implements IndirectMatch {
 
     private final List<String> needMatchClassNames;
 
     public MultiClassNameMatch(String... classNames) {
         if (classNames == null) {
-            throw new IllegalArgumentException("MultiClassMatch's needMatchClassNames must not be null");
+            throw new IllegalArgumentException("类名列表不能为空");
         } else {
             this.needMatchClassNames = Arrays.asList(classNames);
         }

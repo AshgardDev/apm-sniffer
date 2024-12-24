@@ -2,6 +2,11 @@ package org.example.core.plugin.enhance;
 
 import java.lang.reflect.Method;
 
+/**
+ * 静态方法拦截器接口
+ *
+ * @author hbj
+ */
 public interface StaticMethodAroundInterceptor {
 
     void beforeMethod(Class<?> clazz, Method method, Object[] allArguments);

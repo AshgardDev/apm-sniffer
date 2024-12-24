@@ -2,6 +2,9 @@ package org.example.core.plugin.enhance;
 
 import java.lang.reflect.Method;
 
+/**
+ * 实例方法拦截器接口
+ */
 public interface InstanceMethodAroundInterceptor {
 
     void beforeMethod(EnhancedInstance instance, Method method, Object[] allArguments);
