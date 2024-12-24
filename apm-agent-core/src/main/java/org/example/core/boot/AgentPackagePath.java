@@ -29,7 +29,7 @@ public class AgentPackagePath {
             String urlString = resource.toString();
             boolean isInJar = urlString.contains("!");
             if (isInJar) {
-                urlString = urlString.substring(urlString.indexOf("file:"), urlString.indexOf("!"));
+                urlString = urlString.substring(urlString.indexOf("file:")+5, urlString.indexOf("!"));
                 File agentJarFile = null;
                 try {
                     agentJarFile = new File(urlString);

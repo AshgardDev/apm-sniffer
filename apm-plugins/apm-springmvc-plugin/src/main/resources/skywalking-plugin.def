@@ -1,0 +1,1 @@
+springmvc=org.example.apm.springmvc.RestControllerAnnotationInstrumentation

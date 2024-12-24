@@ -11,7 +11,6 @@
         <module>apm-agent</module>
         <module>apm-agent-core</module>
         <module>apm-plugins</module>
-        <module>apm-app-test</module>
     </modules>
 
     <properties>

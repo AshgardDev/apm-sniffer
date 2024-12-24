@@ -8,8 +8,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -41,10 +42,50 @@ public class AgentClassLoader extends ClassLoader {
         }
     }
 
+    public static AgentClassLoader getDefault(){
+        return DEFAULT_LOADER;
+    }
+
+    @Override
+    public URL getResource(String name) {
+        for (Jar jar : allJars) {
+            JarEntry jarEntry = jar.jarFile.getJarEntry(name);
+            if(jarEntry != null) {
+                try {
+                    return getEntryURL(jar.jarFile, jarEntry);
+                } catch (IOException e) {
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Enumeration<URL> getResources(String name) throws IOException {
+        List<URL> urls = new ArrayList<>();
+        for (Jar jar : getAllJars()) {
+            JarEntry jarEntry = jar.jarFile.getJarEntry(name);
+            if(jarEntry != null){
+                URL entryURL = getEntryURL(jar.jarFile, jarEntry);
+                urls.add(entryURL);
+            }
+        }
+        return Collections.enumeration(urls);
+    }
+
+    private static URL getEntryURL(JarFile jarFile, JarEntry jarEntry) throws IOException {
+        // 使用 JarURLConnection 获取 URL
+        URL jarURL = new URL("jar:file:" + jarFile.getName() + "!/" + jarEntry.getName());
+        JarURLConnection jarConnection = (JarURLConnection) jarURL.openConnection();
+
+        // 返回对应的 URL
+        return jarConnection.getURL();
+    }
+
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         List<Jar> allJars = getAllJars();
-        String resourceName = name.replace("\\.", "/") + ".class";
+        String resourceName = name.replaceAll("\\.", "/") + ".class";
         for (Jar jar : allJars) {
             JarEntry jarEntry = jar.jarFile.getJarEntry(resourceName);
             if (jarEntry == null) {

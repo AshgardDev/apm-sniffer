@@ -5,7 +5,7 @@ import net.bytebuddy.description.annotation.AnnotationList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
@@ -34,16 +34,17 @@ public class ClassAnnotationNameMatch implements IndirectMatch {
         return matcher;
     }
 
-    @Override
-    public boolean isMatch(TypeDescription typeDescription) {
+    @Override   public boolean isMatch(TypeDescription typeDescription) {
         AnnotationList declaredAnnotations = typeDescription.getDeclaredAnnotations();
-        List<String> annotationList = Arrays.asList(annotations);
+        List<String> annotationList = new ArrayList<>();
+        for (String annotation : annotations) {
+            annotationList.add(annotation);
+        }
         for (AnnotationDescription declaredAnnotation : declaredAnnotations) {
             annotationList.remove(declaredAnnotation.getAnnotationType().getActualName());
         }
         return annotationList.isEmpty();
     }
-
     public static IndirectMatch byAnnotationMatch(String... annotations) {
         return new ClassAnnotationNameMatch(annotations);
     }

@@ -2,6 +2,7 @@ package org.example.core.plugin.enhance;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bind.annotation.*;
+import org.example.core.loader.InterceptorInstanceLoader;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -12,11 +13,17 @@ public class InstanceMethodInter {
     private InstanceMethodAroundInterceptor interceptor;
 
     public InstanceMethodInter(String methodInterceptor, ClassLoader classLoader) {
+        try {
+            interceptor = InterceptorInstanceLoader.load(methodInterceptor, classLoader);
+        } catch (Exception e) {
+            log.error("构造拦截器失败", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @RuntimeType
     public Object intercept(@This Object instance, @AllArguments Object[] allArguments
-        , @SuperCall Callable<?> zuper, @Origin Method method
+            , @SuperCall Callable<?> zuper, @Origin Method method
     ) throws Throwable {
         String clazzType = instance.getClass().getName();
         log.info("类{}.方法{}拦截开始", instance.getClass().getName(), method.getName());
