@@ -110,6 +110,17 @@ agent-core.jar -- 是应用类加载器加载的
 plugins/xxxInstrumentation.jar -- 是AgentClassLoader默认类加载器加载的
 interceptor -- 是AgentClassLoader(targetClassLoader) 加载的
 
+知识点：
+Class.getResource() 和 ClassLoader.getResource() 区别
+1.Class.getResource(name) ：从当前类所在的位置，相对目录，匹配name资源
+2.ClassLoader.getResource(name) ：从当前类加载器的classpath位置，即默认时ClassPath路径
+3.Class.getResource("").getPath(): 当前类路径
+4.Class.getResource("/").getPath(): 当前项目的根目录
+5.ClassLoader.getResource("").getPath(): 等价于Class.getResource("/")
+6.ClassLoader.getResource("/).getPath(): 报错，因为传入的“/”，则获取的是BootstrapClassLoader加载的资源，而BootstrapClassLoader是由c++实现的，所以得到的是个null。
+
+
+
 
 
 
